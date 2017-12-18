@@ -33,7 +33,7 @@ def write_json_feed(items):
   )
 
 
-r = requests.get(BASE_URL + "api/discussions", verify=certifi.where())
+r = requests.get(BASE_URL + "api/discussions")
 threads = r.json()
 users = {}
 posts = {}
