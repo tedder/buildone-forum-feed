@@ -4,6 +4,10 @@ import boto3
 import json
 import requests
 import datetime
+import urllib3
+
+# hate doing this but the RI's CA is strangely not lining up, even though the CA is found
+urllib3.disable_warnings()
 
 # using the JSON feed spec: https://jsonfeed.org/version/1
 #SITE_URL = "https://www.robotic.industries/community/"
@@ -33,7 +37,7 @@ def write_json_feed(items):
   )
 
 
-r = requests.get(BASE_URL + "api/discussions")
+r = requests.get(BASE_URL + "api/discussions", verify=False)
 threads = r.json()
 users = {}
 posts = {}
@@ -61,7 +65,7 @@ for i in threads.get('data', []):
       'url': BASE_URL + 'd/' + i['id'],
       'date_published': thread_time.isoformat(),
       'author': { 'name': thread_author },
-      'content_html': post_txt,
+      'content_html': post_txt['html'],
     })
 
 
